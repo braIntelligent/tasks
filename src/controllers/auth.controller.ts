@@ -1,10 +1,9 @@
-import {
-  comparePassword,
-  generateToken,
-  normalize,
-} from "@/helpers/user.helpers";
-import { IUser } from "@/interfaces/user.interface";
+import { comparePassword } from "@/helpers/user.helpers";
 import { User } from "@/schemas/mongo/user.schema";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "@/services/tokenGenerator";
 import { Request, Response } from "express";
 
 export const authController = {
@@ -30,7 +29,16 @@ export const authController = {
       }
 
       //genero token del usuario
-      const token = generateToken(user);
+      const accessToken = generateAccessToken(user);
+      const token = generateRefreshToken();
+
+      //guardar token en base de datos
+      
+      // const saveRefreshToken = await User.findByIdAndUpdate(
+      //   user.id,
+      //   { refreshToken: token },
+      //   { new: true }
+      // );
 
       //respuesta al cliente
       const userResponse = {
@@ -38,16 +46,17 @@ export const authController = {
         username: user.username,
         email: user.email,
         role: user.role,
+        refreshToken: user.refreshToken,
       };
       return res.status(200).json({
         message: "User authenticate succesfully",
         user: userResponse,
-        token,
+        token: accessToken,
       });
     } catch (error) {
       console.log(error);
     }
   },
-  refreshUser: () => {},
+  refreshToken: (req: Request, res: Response) => {},
   logoutUser: () => {},
 };

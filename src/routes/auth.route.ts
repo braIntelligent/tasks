@@ -7,7 +7,7 @@ const router = Router();
 router.post("/login",  authController.loginUser);
 
 // private routes
-router.post("/refresh", authController.refreshUser);
+router.post("/refresh", authController.refreshToken);
 router.post("/logout", authController.logoutUser);
 
 export default router;

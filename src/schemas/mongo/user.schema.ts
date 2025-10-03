@@ -1,5 +1,5 @@
 import { IUser } from "@/interfaces/user.interface";
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -25,6 +25,7 @@ const UserSchema = new Schema<IUser>(
       required: true,
       minlength: 8,
     },
+    refreshToken: { type: Schema.Types.ObjectId, ref: "Token" },
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     role: { type: String, enum: ["admin", "user"], default: "user" },
     active: { type: Boolean, default: true },
